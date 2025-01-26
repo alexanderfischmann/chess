@@ -46,42 +46,80 @@
       const chessBoard = document.createElement("div");
       chessBoard.classList.add("chess-board");
 
-      for (let row = 0; row < 8; row++) {
-        for (let col = 0; col < 8; col++) {
-          const square = document.createElement("div");
-          square.classList.add("square");
+      const initialPieces = [
+        ["♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"],
+        ["♟", "♟", "♟", "♟", "♟", "♟", "♟", "♟"],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["♙", "♙", "♙", "♙", "♙", "♙", "♙", "♙"],
+        ["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"]
+      ];
 
-          if ((row + col) % 2 === 0) {
-            square.classList.add("light");
-          } else {
-            square.classList.add("dark");
+      const boardState = [...initialPieces];
+      let selectedSquare = null;
+
+      function handleSquareClick(row, col, square) {
+        if (selectedSquare) {
+          const [selectedRow, selectedCol] = selectedSquare;
+
+          if (selectedRow !== row || selectedCol !== col) {
+            boardState[row][col] = boardState[selectedRow][selectedCol];
+            boardState[selectedRow][selectedCol] = "";
+            selectedSquare = null;
+            renderChessBoard();
+            return;
           }
+        }
 
-          if (row === 1) {
-            square.textContent = "♟";
-            square.classList.add("piece", "black");
-          } else if (row === 6) {
-            square.textContent = "♙";
-            square.classList.add("piece", "white");
+        if (boardState[row][col]) {
+          selectedSquare = [row, col];
+        } else {
+          selectedSquare = null;
+        }
+        renderChessBoard();
+      }
+
+      function renderChessBoard() {
+        chessBoard.innerHTML = "";
+
+        for (let row = 0; row < 8; row++) {
+          for (let col = 0; col < 8; col++) {
+            const square = document.createElement("div");
+            square.classList.add("square");
+
+            if ((row + col) % 2 === 0) {
+              square.classList.add("light");
+            } else {
+              square.classList.add("dark");
+            }
+
+            const piece = boardState[row][col];
+            if (piece) {
+              square.textContent = piece;
+              square.classList.add("piece", row < 2 ? "black" : "white");
+            }
+
+            if (
+              selectedSquare &&
+              selectedSquare[0] === row &&
+              selectedSquare[1] === col
+            ) {
+              square.classList.add("selected");
+            }
+
+            square.addEventListener("click", () =>
+              handleSquareClick(row, col, square)
+            );
+
+            chessBoard.appendChild(square);
           }
-
-          square.addEventListener("click", () => handleSquareClick(square));
-
-          chessBoard.appendChild(square);
         }
       }
 
+      renderChessBoard();
       return chessBoard;
-    }
-
-    function handleSquareClick(square) {
-      const isSelected = square.classList.contains("selected");
-
-      document.querySelectorAll(".square.selected").forEach(sq => sq.classList.remove("selected"));
-
-      if (!isSelected) {
-        square.classList.add("selected");
-      }
     }
 
     root.appendChild(createChessBoard());
