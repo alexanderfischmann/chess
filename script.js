@@ -1,4 +1,5 @@
 const selectSound = new Audio("./resources/button-press-beep-269718.mp3");
+const moveSound = new Audio("./resources/move-self.mp3")
 
 function createChessBoard() {
   const chessBoard = document.createElement("div");
@@ -30,6 +31,7 @@ function createChessBoard() {
         boardState[selectedRow][selectedCol] = "";
         selectedSquare = null;
         currentPlayer = "black";
+        moveSound.play();
         renderChessBoard();
         setTimeout(aiMove, 500);
         return;
