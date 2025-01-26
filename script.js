@@ -1,4 +1,4 @@
-const selectSound = new Audio("./resources/button-press-beep-269718.mp3");
+const selectSound = new Audio("./resources/notify.mp3");
 const moveSound = new Audio("./resources/move-self.mp3")
 
 function createChessBoard() {
@@ -31,16 +31,16 @@ function createChessBoard() {
         boardState[selectedRow][selectedCol] = "";
         selectedSquare = null;
         currentPlayer = "black";
-        moveSound.play();
+        moveSound.play()
         renderChessBoard();
         setTimeout(aiMove, 500);
         return;
       }
     }
 
-    if (boardState[row][col] && boardState[row][col] === "♙") {
+    if (boardState[row][col] && boardState[row][col]) {
       selectedSquare = [row, col];
-      selectSound.play(); // Play selection sound
+      selectSound.play();
     } else {
       selectedSquare = null;
     }
@@ -53,27 +53,22 @@ function createChessBoard() {
       for (let col = 0; col < 8; col++) {
         if (boardState[row][col] === "♟") {
           const forward = row + 1;
+
           if (forward < 8 && !boardState[forward][col]) {
             possibleMoves.push({ from: [row, col], to: [forward, col] });
           }
-          if (
-            forward < 8 &&
-            col > 0 &&
-            boardState[forward][col - 1]?.startsWith("♙")
-          ) {
+
+          if (forward < 8 && col > 0 && boardState[forward][col - 1] && boardState[forward][col - 1] !== "♟") {
             possibleMoves.push({ from: [row, col], to: [forward, col - 1] });
           }
-          if (
-            forward < 8 &&
-            col < 7 &&
-            boardState[forward][col + 1]?.startsWith("♙")
-          ) {
+
+          if (forward < 8 && col < 7 && boardState[forward][col + 1] && boardState[forward][col + 1] !== "♟") {
             possibleMoves.push({ from: [row, col], to: [forward, col + 1] });
           }
         }
       }
     }
-
+  
     if (possibleMoves.length > 0) {
       const move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
       const [fromRow, fromCol] = move.from;
@@ -81,9 +76,10 @@ function createChessBoard() {
       boardState[toRow][toCol] = boardState[fromRow][fromCol];
       boardState[fromRow][fromCol] = "";
     }
+  
     currentPlayer = "white";
     renderChessBoard();
-  }
+  }  
 
   function renderChessBoard() {
     chessBoard.innerHTML = "";
