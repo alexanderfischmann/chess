@@ -22,22 +22,32 @@ function createChessBoard() {
 
   function handleSquareClick(row, col) {
     if (currentPlayer !== "white") return;
-
+  
     if (selectedSquare) {
       const [selectedRow, selectedCol] = selectedSquare;
+      const selectedPiece = boardState[selectedRow][selectedCol];
+  
+      if (selectedPiece === "♙") {
+        const forward = selectedRow - 1;
+        const doubleForward = selectedRow - 2;
 
-      if (selectedRow !== row || selectedCol !== col) {
-        boardState[row][col] = boardState[selectedRow][selectedCol];
-        boardState[selectedRow][selectedCol] = "";
-        selectedSquare = null;
-        currentPlayer = "black";
-        moveSound.play()
-        renderChessBoard();
-        setTimeout(aiMove, 500);
-        return;
+        if (row === forward && col === selectedCol && !boardState[row][col]) {
+          movePawn(selectedRow, selectedCol, row, col);
+          return;
+        }
+  
+        if (selectedRow === 6 && row === doubleForward && col === selectedCol && !boardState[forward][col] && !boardState[row][col]) {
+          movePawn(selectedRow, selectedCol, row, col);
+          return;
+        }
+  
+        if (row === forward && (col === selectedCol - 1 || col === selectedCol + 1) && boardState[row][col] && boardState[row][col] !== "♙") {
+          movePawn(selectedRow, selectedCol, row, col);
+          return;
+        }
       }
     }
-
+  
     if (boardState[row][col] && boardState[row][col]) {
       selectedSquare = [row, col];
       selectSound.play();
@@ -46,6 +56,18 @@ function createChessBoard() {
     }
     renderChessBoard();
   }
+  
+  function movePawn(fromRow, fromCol, toRow, toCol) {
+    boardState[toRow][toCol] = boardState[fromRow][fromCol];
+    boardState[fromRow][fromCol] = "";
+  
+    selectedSquare = null;
+    currentPlayer = "black";
+    moveSound.play();
+    renderChessBoard();
+    setTimeout(aiMove, 500);
+  }
+  
 
   function aiMove() {
     const possibleMoves = [];
