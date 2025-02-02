@@ -1,6 +1,8 @@
 const selectSound = new Audio("./resources/notify.mp3");
 const moveSound = new Audio("./resources/move-self.mp3")
 
+const protectedPieces = ["♙", "♖", "♘", "♗", "♕", "♔"]
+
 function createChessBoard() {
   const chessBoard = document.createElement("div");
   chessBoard.classList.add("chess-board");
@@ -32,36 +34,37 @@ function createChessBoard() {
         const doubleForward = selectedRow - 2;
 
         if (row === forward && col === selectedCol && !boardState[row][col]) {
-          movePawn(selectedRow, selectedCol, row, col);
+          movePiece(selectedRow, selectedCol, row, col);
           return;
         }
   
         if (selectedRow === 6 && row === doubleForward && col === selectedCol && !boardState[forward][col] && !boardState[row][col]) {
-          movePawn(selectedRow, selectedCol, row, col);
+          movePiece(selectedRow, selectedCol, row, col);
           return;
         }
   
-        if (row === forward && (col === selectedCol - 1 || col === selectedCol + 1) && boardState[row][col] && boardState[row][col] !== "♙") {
-          movePawn(selectedRow, selectedCol, row, col);
+        if (row === forward && (col === selectedCol - 1 || col === selectedCol + 1) 
+          && boardState[row][col] && !protectedPieces.includes(boardState[row][col])) {
+        movePiece(selectedRow, selectedCol, row, col);
+        return;
+      }
+      
+      }
+
+      if (selectedPiece === "♔") {
+        if (
+          Math.abs(row - selectedRow) <= 1 && 
+          Math.abs(col - selectedCol) <= 1 &&
+          !boardState[row][col]
+        ) {
+          movePiece(selectedRow, selectedCol, row, col);
           return;
         }
       }
-      if (selectedPiece === "♔") {
-        const forward = selectedRow - 1;
-        const backward = selectedRow - 1;
 
-        if (row === forward && col === selectedCol && !boardState[row][col]) {
-          moveKing(selectedRow, selectedCol, row, col);
-          return;
-        }
-  
-        if (selectedRow === 6 && row === doubleForward && col === selectedCol && !boardState[forward][col] && !boardState[row][col]) {
-          moveKing(selectedRow, selectedCol, row, col);
-          return;
-        }
-  
-        if (row === forward && (col === selectedCol - 1 || col === selectedCol + 1) && boardState[row][col] && boardState[row][col] !== "♙") {
-          moveKing(selectedRow, selectedCol, row, col);
+      if (selectedPiece === "♖") {
+        if (!boardState[row][col]){
+          movePiece(selectedRow, selectedCol, row, col);
           return;
         }
       }
@@ -76,7 +79,7 @@ function createChessBoard() {
     renderChessBoard();
   }
   
-  function movePawn(fromRow, fromCol, toRow, toCol) {
+  function movePiece(fromRow, fromCol, toRow, toCol) {
     boardState[toRow][toCol] = boardState[fromRow][fromCol];
     boardState[fromRow][fromCol] = "";
   
@@ -86,7 +89,6 @@ function createChessBoard() {
     renderChessBoard();
     setTimeout(aiMove, 500);
   }
-  
 
   function aiMove() {
     const possibleMoves = [];
