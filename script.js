@@ -46,6 +46,25 @@ function createChessBoard() {
           return;
         }
       }
+      if (selectedPiece === "♔") {
+        const forward = selectedRow - 1;
+        const backward = selectedRow - 1;
+
+        if (row === forward && col === selectedCol && !boardState[row][col]) {
+          moveKing(selectedRow, selectedCol, row, col);
+          return;
+        }
+  
+        if (selectedRow === 6 && row === doubleForward && col === selectedCol && !boardState[forward][col] && !boardState[row][col]) {
+          moveKing(selectedRow, selectedCol, row, col);
+          return;
+        }
+  
+        if (row === forward && (col === selectedCol - 1 || col === selectedCol + 1) && boardState[row][col] && boardState[row][col] !== "♙") {
+          moveKing(selectedRow, selectedCol, row, col);
+          return;
+        }
+      }
     }
   
     if (boardState[row][col] && boardState[row][col]) {
@@ -97,6 +116,7 @@ function createChessBoard() {
       const [toRow, toCol] = move.to;
       boardState[toRow][toCol] = boardState[fromRow][fromCol];
       boardState[fromRow][fromCol] = "";
+      moveSound.play()
     }
   
     currentPlayer = "white";

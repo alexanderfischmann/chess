@@ -23,8 +23,8 @@
     color: #fff;
   }
   .piece.black {
-    color: #000;
-  }
+    filter: invert(15%) sepia(100%) saturate(500%) hue-rotate(-50deg);
+  }  
   .selected {
     outline: 2px solid red;
   }
