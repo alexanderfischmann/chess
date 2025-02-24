@@ -67,6 +67,27 @@ function createChessBoard() {
           movePiece(selectedRow, selectedCol, row, col);
           return;
         }
+      };
+
+      if (selectedPiece === "♕") {
+        if (!boardState[row][col]){
+          movePiece(selectedRow, selectedCol, row, col);
+          return;
+        }
+      };
+
+      if (selectedPiece === "♗") {
+        if (!boardState[row][col]){
+          movePiece(selectedRow, selectedCol, row, col);
+          return;
+        }
+      };
+
+      if (selectedPiece === "♘") {
+        if (!boardState[row][col]){
+          movePiece(selectedRow, selectedCol, row, col);
+          return;
+        }
       }
     }
   
