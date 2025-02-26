@@ -54,7 +54,11 @@ function createChessBoard() {
         if (
           Math.abs(row - selectedRow) <= 1 && 
           Math.abs(col - selectedCol) <= 1 &&
-          !boardState[row][col] || boardState[row][col] && !protectedPieces.includes(boardState[row][col])
+          !boardState[row][col]
+           || 
+          Math.abs(row - selectedRow) <= 1 && 
+          Math.abs(col - selectedCol) <= 1 &&
+          boardState[row][col] && !protectedPieces.includes(boardState[row][col])
         ) {
           movePiece(selectedRow, selectedCol, row, col);
           return;
@@ -83,7 +87,7 @@ function createChessBoard() {
       };
 
       if (selectedPiece === "♘") {
-        if (!boardState[row][col]){
+        if (!boardState[row][col] || boardState[row][col] && !protectedPieces.includes(boardState[row][col])){
           movePiece(selectedRow, selectedCol, row, col);
           return;
         }
