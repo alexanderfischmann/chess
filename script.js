@@ -45,10 +45,9 @@ function createChessBoard() {
   
         if (row === forward && (col === selectedCol - 1 || col === selectedCol + 1) 
           && boardState[row][col] && !protectedPieces.includes(boardState[row][col])) {
-        movePiece(selectedRow, selectedCol, row, col);
-        return;
-      }
-      
+          movePiece(selectedRow, selectedCol, row, col);
+          return;
+        }
       }
 
       if (selectedPiece === "♔") {
@@ -63,21 +62,21 @@ function createChessBoard() {
       }
 
       if (selectedPiece === "♖") {
-        if (!boardState[row][col]){
+        if (!boardState[row][col] || boardState[row][col] && !protectedPieces.includes(boardState[row][col])){
           movePiece(selectedRow, selectedCol, row, col);
           return;
         }
       };
 
       if (selectedPiece === "♕") {
-        if (!boardState[row][col]){
+        if (!boardState[row][col] || boardState[row][col] && !protectedPieces.includes(boardState[row][col])){
           movePiece(selectedRow, selectedCol, row, col);
           return;
         }
       };
 
       if (selectedPiece === "♗") {
-        if (!boardState[row][col]){
+        if (!boardState[row][col] || boardState[row][col] && !protectedPieces.includes(boardState[row][col])){
           movePiece(selectedRow, selectedCol, row, col);
           return;
         }
