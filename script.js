@@ -66,7 +66,10 @@ function createChessBoard() {
       }
 
       if (selectedPiece === "♖") {
-        if (!boardState[row][col] || boardState[row][col] && !protectedPieces.includes(boardState[row][col])){
+        if (
+
+          !boardState[row][col] || boardState[row][col] && !protectedPieces.includes(boardState[row][col])
+        ){
           movePiece(selectedRow, selectedCol, row, col);
           return;
         }
@@ -87,9 +90,15 @@ function createChessBoard() {
       };
 
       if (selectedPiece === "♘") {
-        if (!boardState[row][col] || boardState[row][col] && !protectedPieces.includes(boardState[row][col])){
-          movePiece(selectedRow, selectedCol, row, col);
-          return;
+        const rowDiff = Math.abs(row - selectedRow);
+        const colDiff = Math.abs(col - selectedCol);
+      
+        // Knights move in an "L" shape: (2,1) or (1,2)
+        if ((rowDiff === 2 && colDiff === 1) || (rowDiff === 1 && colDiff === 2)) {
+          if (!boardState[row][col] || !protectedPieces.includes(boardState[row][col])) {
+            movePiece(selectedRow, selectedCol, row, col);
+            return;
+          }
         }
       }
     }
