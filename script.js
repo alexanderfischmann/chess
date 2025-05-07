@@ -67,7 +67,6 @@ function createChessBoard() {
 
       if (selectedPiece === "♖") {
         if (
-
           !boardState[row][col] || boardState[row][col] && !protectedPieces.includes(boardState[row][col])
         ){
           movePiece(selectedRow, selectedCol, row, col);
@@ -76,12 +75,36 @@ function createChessBoard() {
       };
 
       if (selectedPiece === "♕") {
-        if (!boardState[row][col] || boardState[row][col] && !protectedPieces.includes(boardState[row][col])){
-          movePiece(selectedRow, selectedCol, row, col);
-          return;
+        const rowDiff = row - selectedRow;
+        const colDiff = col - selectedCol;
+      
+        const stepRow = Math.sign(rowDiff);
+        const stepCol = Math.sign(colDiff);
+      
+        const isStraight = rowDiff === 0 || colDiff === 0;
+        const isDiagonal = Math.abs(rowDiff) === Math.abs(colDiff);
+      
+        if (isStraight || isDiagonal) {
+          let clearPath = true;
+          let r = selectedRow + stepRow;
+          let c = selectedCol + stepCol;
+      
+          while (r !== row || c !== col) {
+            if (boardState[r][c] !== "") {
+              clearPath = false;
+              break;
+            }
+            r += stepRow;
+            c += stepCol;
+          }
+      
+          if (clearPath && (!boardState[row][col] || !protectedPieces.includes(boardState[row][col]))) {
+            movePiece(selectedRow, selectedCol, row, col);
+            return;
+          }
         }
-      };
-
+      }
+      
       if (selectedPiece === "♗") {
         if (!boardState[row][col] || boardState[row][col] && !protectedPieces.includes(boardState[row][col])){
           movePiece(selectedRow, selectedCol, row, col);
@@ -93,7 +116,6 @@ function createChessBoard() {
         const rowDiff = Math.abs(row - selectedRow);
         const colDiff = Math.abs(col - selectedCol);
       
-        // Knights move in an "L" shape: (2,1) or (1,2)
         if ((rowDiff === 2 && colDiff === 1) || (rowDiff === 1 && colDiff === 2)) {
           if (!boardState[row][col] || !protectedPieces.includes(boardState[row][col])) {
             movePiece(selectedRow, selectedCol, row, col);
