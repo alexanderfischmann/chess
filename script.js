@@ -106,11 +106,32 @@ function createChessBoard() {
       }
       
       if (selectedPiece === "♗") {
-        if (!boardState[row][col] || boardState[row][col] && !protectedPieces.includes(boardState[row][col])){
-          movePiece(selectedRow, selectedCol, row, col);
-          return;
+        const rowDiff = row - selectedRow;
+        const colDiff = col - selectedCol;
+      
+        if (Math.abs(rowDiff) === Math.abs(colDiff)) {
+          const stepRow = Math.sign(rowDiff);
+          const stepCol = Math.sign(colDiff);
+      
+          let r = selectedRow + stepRow;
+          let c = selectedCol + stepCol;
+          let clearPath = true;
+      
+          while (r !== row && c !== col) {
+            if (boardState[r][c] !== "") {
+              clearPath = false;
+              break;
+            }
+            r += stepRow;
+            c += stepCol;
+          }
+      
+          if (clearPath && (!boardState[row][col] || !protectedPieces.includes(boardState[row][col]))) {
+            movePiece(selectedRow, selectedCol, row, col);
+            return;
+          }
         }
-      };
+      }
 
       if (selectedPiece === "♘") {
         const rowDiff = Math.abs(row - selectedRow);
