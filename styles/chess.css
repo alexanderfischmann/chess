@@ -28,4 +28,20 @@
   .selected {
     outline: 2px solid red;
   }
+
+  #game-status {
+    margin-top: 10px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    height: 2rem;
+  }
+  
+  #game-status.game-over {
+    color: red;
+  }
+  
+  #game-status.you-win {
+    color: blue;
+  }
   

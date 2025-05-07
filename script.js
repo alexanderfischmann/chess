@@ -203,24 +203,29 @@ function createChessBoard() {
 
   function renderChessBoard() {
     chessBoard.innerHTML = "";
-
+  
+    let whiteKingExists = false;
+    let blackKingExists = false;
+  
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
         const square = document.createElement("div");
         square.classList.add("square");
-
+  
         if ((row + col) % 2 === 0) {
           square.classList.add("light");
         } else {
           square.classList.add("dark");
         }
-
+  
         const piece = boardState[row][col];
         if (piece) {
           square.textContent = piece;
           square.classList.add("piece", piece === piece.toUpperCase() ? "white" : "black");
+          if (piece === "♔") whiteKingExists = true;
+          if (piece === "♚") blackKingExists = true;
         }
-
+  
         if (
           selectedSquare &&
           selectedSquare[0] === row &&
@@ -228,13 +233,26 @@ function createChessBoard() {
         ) {
           square.classList.add("selected");
         }
-
+  
         square.addEventListener("click", () => handleSquareClick(row, col));
-
         chessBoard.appendChild(square);
       }
     }
-  }
+  
+    const statusEl = document.getElementById("game-status");
+    if (statusEl) {
+      statusEl.className = "";
+      if (!whiteKingExists) {
+        statusEl.textContent = "GAME OVER";
+        statusEl.classList.add("game-over");
+      } else if (!blackKingExists) {
+        statusEl.textContent = "YOU WIN";
+        statusEl.classList.add("you-win");
+      } else {
+        statusEl.textContent = "";
+      }
+    }
+  }  
 
   renderChessBoard();
   return chessBoard;
