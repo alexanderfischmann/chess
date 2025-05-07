@@ -2,8 +2,8 @@
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
-    width: 400px;
-    height: 400px;
+    width: 600px;
+    height: 600px;
     border: 2px solid black;
   }
   .square {
